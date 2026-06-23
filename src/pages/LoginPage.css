@@ -1,0 +1,228 @@
+:root {
+  --blue: #0073BC;
+  --sky: #4DA6FF;
+  --cyan: #AEE3FF;
+  --coral: #FF4D6D;
+  --yellow: #FFD166;
+  --off-white: #FAFBFF;
+  --bluer-white: #F0F4FA;
+}
+
+.login-screen {
+  padding: 16px; /* keeps the card off the screen edges on very narrow viewports */
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  background: var(--bluer-white);
+  overflow: hidden;
+  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.5s ease;
+}
+
+.login-screen.leaving {
+  transform: translateY(-100%);
+  opacity: 0.4;
+}
+
+.patent-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.patent-field span {
+  position: absolute;
+  font-family: 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  font-size: 13px;
+  color: #94cce9;
+  opacity: 0.55;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.login-card {
+  position: relative;
+  width: 380px;
+  max-width: calc(100vw - 32px); /* never exceeds viewport minus breathing room */
+  padding: 40px 36px 32px;
+  background: var(--off-white);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 115, 188, 0.12);
+  box-shadow: 0 24px 48px -16px rgba(0, 115, 188, 0.18);
+  z-index: 2;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+}
+
+.login-card.success {
+  transform: scale(0.94);
+  opacity: 0;
+}
+
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.wordmark-mark {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--coral);
+  transform: translateY(-1px);
+}
+
+.wordmark-text {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #0B1F33;
+}
+
+.login-subtitle {
+  font-size: 13px;
+  color: #6B7A8C;
+  margin: 2px 0 28px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4D5C70;
+  margin-bottom: 7px;
+  letter-spacing: 0.01em;
+}
+
+.field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  font-size: 14px;
+  border: 1.5px solid #E3E9F2;
+  border-radius: 8px;
+}
+
+.field input::placeholder {
+  color: #A7B2C2;
+}
+
+.field input:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.16);
+}
+
+.field input.error-state {
+  border-color: var(--coral);
+}
+
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #B23A52;
+  background: rgba(255, 77, 109, 0.08);
+  border: 1px solid rgba(255, 77, 109, 0.18);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--blue);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #0064A5;
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.submit-btn:disabled {
+  background: var(--sky);
+  cursor: default;
+}
+
+.submit-btn .spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: -2px;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.footnote {
+  text-align: center;
+  font-size: 12px;
+  color: #9AA7B8;
+  margin-top: 20px;
+}
+
+.sweep-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--sky), var(--yellow));
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.sweep-line.sweeping {
+  animation: sweep 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes sweep {
+  0% { transform: scaleX(0); opacity: 1; }
+  85% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 32px 24px 24px;
+    border-radius: 12px;
+  }
+
+  .wordmark-text {
+    font-size: 20px;
+  }
+
+  .field input {
+    padding: 10px 12px;
+    font-size: 16px; /* iOS Safari zooms in on focus if inputs are <16px — this avoids that */
+  }
+}
+
