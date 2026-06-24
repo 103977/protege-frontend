@@ -281,7 +281,28 @@ export function ChatPage() {
           messagesLoaded: false,
         }));
 
-        setChats((prev) => [...prev, ...loaded]);
+        setChats((prev) => {
+          const drafts = prev.filter((c) => !c.conversationId);
+
+          // Preserve already-loaded message state for chats we've opened, so a
+          // re-fetch of the list doesn't blow away messages on screen.
+          const loadedById = new Map(
+            prev
+              .filter((c) => c.conversationId && c.messagesLoaded)
+              .map((c) => [c.conversationId, c])
+          );
+
+          const seen = new Set();
+          const unique = loaded
+            .filter((c) => {
+              if (seen.has(c.conversationId)) return false;
+              seen.add(c.conversationId);
+              return true;
+            })
+            .map((c) => loadedById.get(c.conversationId) || c);
+
+          return [...drafts, ...unique];
+        });
       } catch (err) {
         console.error("Failed to load conversation history:", err);
       }
