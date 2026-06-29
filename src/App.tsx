@@ -5,10 +5,12 @@ import { DashboardPage } from './pages/DashboardPage'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { PublicOnlyRoute } from './auth/PublicOnlyRoute'
 import { useAuth } from './auth/useAuth'
+import { useDarkMode } from './lib/useDarkMode'
 
 function App() {
   const navigate = useNavigate()
   const { login } = useAuth()
+  useDarkMode() // keep the dark class in sync on every page including login
 
   async function handleLogin(email: string, password: string) {
     await login(email, password)
