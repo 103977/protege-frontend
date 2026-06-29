@@ -183,7 +183,7 @@ export function ChatPage() {
   ])
   const [activeChatId, setActiveChatId] = useState(() => chats[0].id)
   const [input, setInput] = useState('')
-  const [sending, setSending] = useState(false)
+  const [sendingChatId, setSendingChatId] = useState<string | null>(null)
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH)
   const [isResizing, setIsResizing] = useState(false)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
@@ -214,7 +214,7 @@ export function ChatPage() {
   useEffect(() => {
     const el = scrollRef.current
     if (el && stickToBottomRef.current) el.scrollTop = el.scrollHeight
-  }, [messages, sending])
+  }, [messages, sendingChatId])
 
   useEffect(() => {
     if (!confirmDeleteId) return
@@ -355,11 +355,11 @@ export function ChatPage() {
         break
       case 'error':
         updateChat(chatId, (c) => ({ ...c, messages: [...c.messages, { id: nextId(), role: 'assistant', type: 'text', text: `⚠️ ${data.message}` }] }))
-        setSending(false); pendingChatIdRef.current = null
+        setSendingChatId(null); pendingChatIdRef.current = null
         break
       case 'done':
         updateChat(chatId, (c) => ({ ...c, messages: c.messages.map((m) => (m.streaming ? { ...m, streaming: false } : m)) }))
-        setSending(false); pendingChatIdRef.current = null
+        setSendingChatId(null); pendingChatIdRef.current = null
         break
     }
   }
@@ -401,11 +401,11 @@ export function ChatPage() {
 
   function sendMessage(text: string) {
     const trimmed = text.trim()
-    if (!trimmed || sending) return
+    if (!trimmed || sendingChatId !== null) return
     if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) { console.error('Socket not connected'); return }
     const chatId = activeChatId
     updateChat(chatId, (c) => ({ ...c, title: c.messages.length === 0 ? trimmed.slice(0, 40) : c.title, meta: 'Just now', messages: [...c.messages, { id: nextId(), role: 'user', type: 'text', text: trimmed }] }))
-    setInput(''); setSending(true); pendingChatIdRef.current = chatId
+    setInput(''); setSendingChatId(chatId); pendingChatIdRef.current = chatId
     socketRef.current.send(JSON.stringify({ action: 'sendmessage', query: trimmed, conversationId: activeChat?.conversationId || undefined }))
   }
 
@@ -419,12 +419,13 @@ export function ChatPage() {
     if (ta) { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 160) + 'px' }
   }
 
-  const showGreeting = messages.length === 0 && !sending
+  const isActiveChatSending = sendingChatId === activeChatId
+  const showGreeting = messages.length === 0 && !isActiveChatSending
   const groups = groupMessages(messages)
   const lastGroup = groups[groups.length - 1]
   const streaming = messages.some((m) => m.streaming)
-  const showLeadingThinking = sending && (!lastGroup || lastGroup.role === 'user')
-  const showTrailingThinking = sending && lastGroup?.role === 'assistant' && !streaming
+  const showLeadingThinking = isActiveChatSending && (!lastGroup || lastGroup.role === 'user')
+  const showTrailingThinking = isActiveChatSending && lastGroup?.role === 'assistant' && !streaming
 
   interface Block { type: 'text' | 'step' | 'chart'; id: string; text?: string; steps?: Message[]; spec?: Record<string, unknown> }
 
@@ -665,7 +666,7 @@ export function ChatPage() {
                   size="icon"
                   className="h-7 w-7 shrink-0"
                   onClick={() => sendMessage(input)}
-                  disabled={!input.trim() || sending}
+                  disabled={!input.trim() || sendingChatId !== null}
                 >
                   <SendIcon className="h-3.5 w-3.5" />
                 </Button>
