@@ -1,7 +1,78 @@
-body {
-  font-family: 'Figtree', system-ui, -apple-system, sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Claude light — warm cream, not cold white */
+    --background: 36 24% 96%;
+    --foreground: 30 12% 12%;
+
+    --card: 36 30% 99%;
+    --card-foreground: 30 12% 12%;
+
+    --popover: 36 30% 99%;
+    --popover-foreground: 30 12% 12%;
+
+    --primary: 30 12% 15%;
+    --primary-foreground: 36 20% 97%;
+
+    --secondary: 36 18% 91%;
+    --secondary-foreground: 30 12% 15%;
+
+    --muted: 36 18% 91%;
+    --muted-foreground: 30 8% 42%;
+
+    --accent: 36 18% 88%;
+    --accent-foreground: 30 12% 15%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 36 14% 86%;
+    --input: 36 14% 86%;
+    --ring: 30 12% 15%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Claude dark — warm charcoal, not cold black */
+    --background: 36 10% 11%;
+    --foreground: 36 15% 88%;
+
+    --card: 36 10% 15%;
+    --card-foreground: 36 15% 88%;
+
+    --popover: 36 10% 15%;
+    --popover-foreground: 36 15% 88%;
+
+    --primary: 36 15% 85%;
+    --primary-foreground: 36 10% 11%;
+
+    --secondary: 36 8% 20%;
+    --secondary-foreground: 36 15% 85%;
+
+    --muted: 36 8% 20%;
+    --muted-foreground: 36 8% 55%;
+
+    --accent: 36 8% 23%;
+    --accent-foreground: 36 15% 85%;
+
+    --destructive: 0 55% 45%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 36 8% 22%;
+    --input: 36 8% 22%;
+    --ring: 36 12% 62%;
+  }
 }
 
-.mono {
-  font-family: 'JetBrains Mono', monospace;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
 }

@@ -1,18 +1,18 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { LoginPage } from "./pages/LoginPage";
-import { ChatPage } from "./pages/ChatPage";
-import { DashboardPage } from "./pages/DashboardPage";
-import { ProtectedRoute } from "./auth/ProtectedRoute";
-import { PublicOnlyRoute } from "./auth/PublicOnlyRoute";
-import { useAuth } from "./auth/useAuth";
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { LoginPage } from './pages/LoginPage'
+import { ChatPage } from './pages/ChatPage'
+import { DashboardPage } from './pages/DashboardPage'
+import { ProtectedRoute } from './auth/ProtectedRoute'
+import { PublicOnlyRoute } from './auth/PublicOnlyRoute'
+import { useAuth } from './auth/useAuth'
 
 function App() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
-  async function handleLogin(email, password) {
-    await login(email, password);
-    setTimeout(() => navigate("/chat"), 900);
+  async function handleLogin(email: string, password: string) {
+    await login(email, password)
+    setTimeout(() => navigate('/chat'), 900)
   }
 
   return (
@@ -33,7 +33,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route 
+      <Route
         path="/dashboard"
         element={
           <ProtectedRoute>
@@ -43,7 +43,7 @@ function App() {
       />
       <Route path="/" element={<LoginPage onLogin={handleLogin} />} />
     </Routes>
-  );
+  )
 }
 
-export default App;
+export default App
