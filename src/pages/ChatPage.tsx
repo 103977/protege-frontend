@@ -532,18 +532,21 @@ export function ChatPage() {
           <ScrollArea className="flex-1">
             <div className="px-2 pb-2 space-y-0.5">
               {chats.map((c) => (
-                <div key={c.id} className="relative group">
+                <div
+                  key={c.id}
+                  className={cn(
+                    'group relative flex items-center rounded-md transition-colors hover:bg-accent',
+                    c.id === activeChatId && 'bg-accent'
+                  )}
+                >
                   <button
-                    className={cn(
-                      'w-full text-left rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent',
-                      c.id === activeChatId && 'bg-accent'
-                    )}
+                    className="flex-1 min-w-0 text-left px-3 py-2 text-sm"
                     onClick={() => handleSelectChat(c)}
                   >
                     <p className="truncate font-medium text-xs">{c.title || 'New chat'}</p>
-                    <p className="text-xs text-muted-foreground">{c.meta}</p>
+                    <p className="truncate text-xs text-muted-foreground">{c.meta}</p>
                   </button>
-                  <div className="absolute right-1 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center gap-0.5">
+                  <div className="shrink-0 pr-1.5 hidden group-hover:flex items-center gap-0.5">
                     {confirmDeleteId === c.id ? (
                       <div className="flex items-center gap-1 bg-background border rounded-md px-1.5 py-1 shadow-sm" onClick={(e) => e.stopPropagation()}>
                         <span className="text-xs text-muted-foreground">Delete?</span>
